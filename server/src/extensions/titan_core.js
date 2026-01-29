@@ -156,25 +156,6 @@ if (!globalThis.__TITAN_CORE_LOADED__) {
         t.fetch.__titanWrapped = true;
     }
 
-    // read
-    if (t.read && !t.read.__titanWrapped) {
-        const nativeRead = t.read;
-        t.read = function (path) {
-            return createAsyncOp(nativeRead(path));
-        };
-        t.read.__titanWrapped = true;
-    }
-
-    // fs.read
-    if (t.core && t.core.fs && t.core.fs.read && !t.core.fs.read.__titanWrapped) {
-        const nativeFsRead = t.core.fs.read;
-        t.core.fs.read = function (path) {
-            return createAsyncOp(nativeFsRead(path));
-        };
-        t.core.fs.read.__titanWrapped = true;
-        t.core.fs.readFile = t.core.fs.read;
-    }
-
     // db.connect
     if (t.db && !t.db.__titanWrapped) {
         const nativeDbConnect = t.db.connect;
