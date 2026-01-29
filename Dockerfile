@@ -59,7 +59,6 @@ RUN mkdir -p /app/actions
 COPY --from=builder /app/server/actions /app/actions
 
 # Copy Static files
-# Copy Static files
 RUN mkdir -p /app/static
 COPY --from=builder /app/app/static /app/static
 
