@@ -1,7 +1,7 @@
 const { fs } = t.core;
 
 // preload template once
-const TEMPLATE = fs.readFile("../app/static/index.html");
+const TEMPLATE = fs.readFile("./static/index.html");
 
 // renderer
 function render(template, data) {
