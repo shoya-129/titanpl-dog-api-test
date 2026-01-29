@@ -58,6 +58,10 @@ COPY --from=builder /app/server/action_map.json ./action_map.json
 RUN mkdir -p /app/actions
 COPY --from=builder /app/server/actions /app/actions
 
+# Copy Static files
+RUN mkdir -p /app/static
+COPY --from=builder /app/server/static /app/static
+
 # Copy only Titan extensions
 COPY --from=builder /app/.ext ./.ext
 
