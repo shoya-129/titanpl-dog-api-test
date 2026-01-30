@@ -3,11 +3,16 @@
 # ================================================================
 FROM node:20.11.1-slim AS builder
 
-# ---- Essential Build Tools + Minimal Rust ----
+# ---- Essential Build Tools + Rust (Stable for Edition 2024) ----
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl ca-certificates build-essential pkg-config libssl-dev git \
+    curl \
+    ca-certificates \
+    build-essential \
+    pkg-config \
+    libssl-dev \
+    git \
     && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | \
-       sh -s -- -y --default-toolchain 1.84.0 --profile minimal \
+       sh -s -- -y --default-toolchain stable --profile minimal \
     && rm -rf /var/lib/apt/lists/*
 
 ENV PATH="/root/.cargo/bin:${PATH}"
@@ -32,13 +37,13 @@ RUN npm ci --omit=dev
 # ---------------- Install Titan CLI ----------------
 RUN npm install -g @ezetgalaxy/titan@latest
 
-# ---------------- Copy Project ----------------
+# ---------------- Copy Project Files ----------------
 COPY . .
 
-# ---------------- Titan Metadata + Bundles ----------------
+# ---------------- Titan Metadata + Action Bundles ----------------
 RUN node app/app.js --build && titan build
 
-# ---------------- Extension Extraction ----------------
+# ---------------- Extract Titan Extensions ----------------
 SHELL ["/bin/bash", "-c"]
 RUN mkdir -p /app/.ext && \
     find /app/node_modules -type f -name "titan.json" -print0 | \
@@ -78,10 +83,10 @@ COPY --from=builder /app/server/src/actions ./actions
 COPY --from=builder /app/app/static ./static
 COPY --from=builder /app/.ext ./.ext
 
-# ---- Prove Node Is Not Present ----
+# ---- Proof: Node Not Present ----
 RUN which node && exit 1 || echo "NodeJS not present ✔"
 
-# ---- Optional Healthcheck ----
+# ---- Optional Healthcheck (Railway / Render Friendly) ----
 HEALTHCHECK CMD curl -f http://localhost:${PORT:-5100}/health || exit 1
 
 EXPOSE 5100
