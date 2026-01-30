@@ -2,7 +2,16 @@ const { fs } = t.core;
 
 // preload template once
 const root = globalThis.__titan_root || ".";
-const TEMPLATE = fs.readFile(root + "/app/static/index.html") || fs.readFile(root + "/static/index.html") || "<h1>No Template</h1>";
+let TEMPLATE = null;
+function getTemplate() {
+    if (TEMPLATE) return TEMPLATE;
+    try {
+        TEMPLATE = fs.readFile(root + "/static/index.html") || fs.readFile(root + "/app/static/index.html");
+    } catch (e) {
+        t.log("Template load error:", e);
+    }
+    return TEMPLATE || "<h1>No Template (Load Failed)</h1>";
+}
 // renderer
 function render(template, data) {
     let out = template;
@@ -20,7 +29,7 @@ export const hello = () => {
 
     const data = JSON.parse(res.body);
 
-    const html = render(TEMPLATE, {
+    const html = render(getTemplate(), {
         name: "Shoya",
         dog_image: data.message
     });
