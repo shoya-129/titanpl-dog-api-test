@@ -1,0 +1,61 @@
+var Titan = t;
+var __titan_exports = (() => {
+  var __defProp = Object.defineProperty;
+  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+  var __getOwnPropNames = Object.getOwnPropertyNames;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __export = (target, all) => {
+    for (var name in all)
+      __defProp(target, name, { get: all[name], enumerable: true });
+  };
+  var __copyProps = (to, from, except, desc) => {
+    if (from && typeof from === "object" || typeof from === "function") {
+      for (let key of __getOwnPropNames(from))
+        if (!__hasOwnProp.call(to, key) && key !== except)
+          __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+    }
+    return to;
+  };
+  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+  // app/actions/hello.js
+  var hello_exports = {};
+  __export(hello_exports, {
+    hello: () => hello
+  });
+  var { fs } = t.core;
+  var root = globalThis.__titan_root || ".";
+  var TEMPLATE = fs.readFile(root + "/app/static/index.html") || fs.readFile(root + "/static/index.html") || "<h1>No Template</h1>";
+  function render(template, data) {
+    let out = template;
+    for (const k in data) {
+      out = out.replaceAll(`tpl{{${k}}}`, data[k]);
+    }
+    return out;
+  }
+  var hello = () => {
+    const res = drift(
+      t.fetch("https://dog.ceo/api/breeds/image/random")
+    );
+    const data = JSON.parse(res.body);
+    const html = render(TEMPLATE, {
+      name: "Shoya",
+      dog_image: data.message
+    });
+    return t.response.html(html);
+  };
+  return __toCommonJS(hello_exports);
+})();
+
+(function () {
+  const fn =
+    __titan_exports["hello"] ||
+    __titan_exports.default;
+
+  if (typeof fn !== "function") {
+    throw new Error("[Titan] Action 'hello' not found or not a function");
+  }
+
+  globalThis["hello"] = globalThis.defineAction(fn);
+})();
+

@@ -1,0 +1,49 @@
+var Titan = t;
+var __titan_exports = (() => {
+  var __defProp = Object.defineProperty;
+  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+  var __getOwnPropNames = Object.getOwnPropertyNames;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __export = (target, all) => {
+    for (var name in all)
+      __defProp(target, name, { get: all[name], enumerable: true });
+  };
+  var __copyProps = (to, from, except, desc) => {
+    if (from && typeof from === "object" || typeof from === "function") {
+      for (let key of __getOwnPropNames(from))
+        if (!__hasOwnProp.call(to, key) && key !== except)
+          __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+    }
+    return to;
+  };
+  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+  // app/actions/dtest.js
+  var dtest_exports = {};
+  __export(dtest_exports, {
+    dtest: () => dtest
+  });
+  var dtest = () => {
+    const res = drift(
+      t.fetch("https://dog.ceo/api/breeds/image/random")
+    );
+    const data = JSON.parse(res.body);
+    return t.response.json({
+      url: data.message
+    });
+  };
+  return __toCommonJS(dtest_exports);
+})();
+
+(function () {
+  const fn =
+    __titan_exports["dtest"] ||
+    __titan_exports.default;
+
+  if (typeof fn !== "function") {
+    throw new Error("[Titan] Action 'dtest' not found or not a function");
+  }
+
+  globalThis["dtest"] = globalThis.defineAction(fn);
+})();
+

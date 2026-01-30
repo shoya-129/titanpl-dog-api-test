@@ -7,4 +7,4 @@ t.get("/hello").action("hello") // pass a json payload { "name": "titan" }
 
 t.get("/").reply("Ready to land on Titan Planet 🚀");
 
-t.start(5100, "Titan Running!", 30);
+t.start(5100, "Titan Running!", 30, 16);

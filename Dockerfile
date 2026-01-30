@@ -1,5 +1,5 @@
 # ================================================================
-# STAGE 1 — Build Titan (JS → Rust)
+# STAGE 1 — Build TitanPl (JS → Rust)
 # ================================================================
 FROM rust:1.91.1 AS builder
 
@@ -58,13 +58,9 @@ COPY --from=builder /app/server/action_map.json ./action_map.json
 RUN mkdir -p /app/actions
 COPY --from=builder /app/server/actions /app/actions
 
-# Copy Static files
-RUN mkdir -p /app/static
-COPY --from=builder /app/app/static /app/static
-
 # Copy only Titan extensions
 COPY --from=builder /app/.ext ./.ext
 
-EXPOSE 3000
+EXPOSE 5100
 
 CMD ["./titan-server"]

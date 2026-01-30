@@ -1,7 +1,8 @@
 const { fs } = t.core;
 
 // preload template once
-const TEMPLATE = fs.readFile("./static/index.html") || "<h1>No Template</h1>";
+const root = globalThis.__titan_root || ".";
+const TEMPLATE = fs.readFile(root + "/app/static/index.html") || fs.readFile(root + "/static/index.html") || "<h1>No Template</h1>";
 // renderer
 function render(template, data) {
     let out = template;

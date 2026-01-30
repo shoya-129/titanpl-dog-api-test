@@ -27,7 +27,9 @@ if (!globalThis.__TITAN_CORE_LOADED__) {
 
                 if (result && typeof result.then === 'function') {
                     result.then(
-                        (data) => t._finish_request(requestId, data),
+                        (data) => {
+                            t._finish_request(requestId, data);
+                        },
                         (err) => {
                             if (isSuspend(err)) return;
                             t._finish_request(requestId, { error: err.message || String(err) });
