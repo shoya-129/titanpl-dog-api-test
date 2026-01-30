@@ -323,7 +323,11 @@ async fn main() -> Result<()> {
     let raw = fs::read_to_string("./routes.json").unwrap_or_else(|_| "{}".to_string());
     let json: Value = serde_json::from_str(&raw).unwrap_or_default();
 
-    let port = json["__config"]["port"].as_u64().unwrap_or(3000);
+    let port = std::env::var("PORT")
+        .ok()
+        .and_then(|p| p.parse::<u64>().ok())
+        .or_else(|| json["__config"]["port"].as_u64())
+        .unwrap_or(3000);
     let thread_count = json["__config"]["threads"].as_u64();
     let routes_json = json["routes"].clone();
     let map: HashMap<String, RouteVal> = serde_json::from_value(routes_json).unwrap_or_default();
