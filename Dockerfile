@@ -1,7 +1,7 @@
 # ================================================================
 # STAGE 1 — Build TitanPl
 # ================================================================
-FROM node:20.11.1-slim AS builder
+FROM node:20.20.0-slim AS builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl ca-certificates build-essential pkg-config libssl-dev git bash \
@@ -51,7 +51,7 @@ RUN cd server && cargo build --release
 
 
 # ================================================================
-# STAGE 2 — Runtime (Fixed)
+# STAGE 2 — Runtime (Render Safe)
 # ================================================================
 FROM debian:bookworm-slim
 
@@ -61,7 +61,7 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-# ---- Copy Files FIRST (root user) ----
+# ---- Copy Files as root ----
 COPY --from=builder /app/server/target/release/titan-server ./titan-server
 COPY --from=builder /app/server/routes.json .
 COPY --from=builder /app/server/action_map.json .
@@ -69,17 +69,21 @@ COPY --from=builder /app/server/src/actions ./actions
 COPY --from=builder /app/app/static ./static
 COPY --from=builder /app/.ext ./.ext
 
-# ---- Create Non-Root User AFTER Copy ----
+# ---- Ensure Executable ----
+RUN chmod +x ./titan-server
+
+# ---- Create User After Copy ----
 RUN useradd -m titan && chown -R titan:titan /app
 USER titan
 
-# ---- Platform Compatibility ----
+# ---- Platform Defaults ----
 ENV HOST=0.0.0.0
 ENV PORT=5100
 
-# ---- Proof Node Not Present ----
+# ---- Verify Node Not Present ----
 RUN which node || echo "NodeJS not present ✔"
 
 EXPOSE 5100
 
-CMD ["./titan-server"]
+# ---- Force Foreground Process ----
+ENTRYPOINT ["./titan-server"]
