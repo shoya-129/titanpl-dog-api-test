@@ -24,8 +24,17 @@ var __titan_exports = (() => {
     hello: () => hello
   });
   var { fs } = t.core;
-  var root = globalThis.__titan_root || ".";
-  var TEMPLATE = fs.readFile(root + "/app/static/index.html") || fs.readFile(root + "/static/index.html") || "<h1>No Template</h1>";
+  var root = "../app";
+  var TEMPLATE = null;
+  function getTemplate() {
+    if (TEMPLATE) return TEMPLATE;
+    try {
+      TEMPLATE = fs.readFile(root + "/static/index.html") || fs.readFile(root + "/app/static/index.html");
+    } catch (e) {
+      t.log("Template load error:", e);
+    }
+    return TEMPLATE || "<h1>No Template (Load Failed)</h1>";
+  }
   function render(template, data) {
     let out = template;
     for (const k in data) {
@@ -38,8 +47,7 @@ var __titan_exports = (() => {
       t.fetch("https://dog.ceo/api/breeds/image/random")
     );
     const data = JSON.parse(res.body);
-    const html = render(TEMPLATE, {
-      name: "Shoya",
+    const html = render(getTemplate(), {
       dog_image: data.message
     });
     return t.response.html(html);

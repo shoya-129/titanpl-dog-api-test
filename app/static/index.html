@@ -17,18 +17,11 @@
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
   <div id="card" class="max-w-xl p-10 bg-white rounded-3xl shadow-xl text-center opacity-0 translate-y-10">
-    <h1 id="title" class="text-5xl font-bold text-indigo-600 mb-4 opacity-0">
-      Hello, tpl{{name}}
-    </h1>
-
-    <p id="paragraph" class="text-gray-600 text-lg leading-relaxed opacity-0">
-      This is a modern UI sample page built with TailwindCSS and GSAP animations.
-    </p>
 
     <img src="tpl{{dog_image}}" class="mt-8 w-full rounded-2xl shadow-lg transition-opacity duration-500 opacity-0"
       onload="this.classList.remove('opacity-0')" />
 
-    <a id="btn"
+    <a id="btn" href="tpl{{dog_image}}"
       class="mt-8 px-8 py-3 text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-all duration-300 opacity-0">
       Click Me
     </a>
