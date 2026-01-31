@@ -1,9 +1,13 @@
 import t from "../titan/titan.js";
 
 
-t.get("/d").action("d")
 
-t.get("/hello").action("hello") // pass a json payload { "name": "titan" }
+
+
+
+t.get("/d").action("dtest")
+
+t.get("/hello").action("hello")
 
 t.get("/").reply("Ready to land on Titan Planet 🚀");
 
