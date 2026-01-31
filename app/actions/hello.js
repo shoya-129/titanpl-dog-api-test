@@ -7,7 +7,12 @@ export const hello = () => {
         t.fetch("https://dog.ceo/api/breeds/image/random")
     );
 
+    t.ui.clearCache()
+
     const data = JSON.parse(res.body);
 
-    return ui.render("static/index.html", { dog_image: data.message })
+    return ui.render("static/index.html",
+        { dog_image: data.message },
+        { css: "static/st.css" }
+    )
 };
