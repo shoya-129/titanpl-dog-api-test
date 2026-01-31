@@ -1,3 +1,4 @@
+/* eslint-disable titanpl/drift-only-titan-async */
 export const dtest = () => {
     const res = drift(
         t.fetch("https://dog.ceo/api/breeds/image/random")

@@ -18,10 +18,10 @@ var __titan_exports = (() => {
   };
   var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-  // app/actions/hello.js
-  var hello_exports = {};
-  __export(hello_exports, {
-    hello: () => hello
+  // app/actions/render.js
+  var render_exports = {};
+  __export(render_exports, {
+    default: () => render_default
   });
 
   // node_modules/@t8n/ui/utils/registerExtension.js
@@ -119,26 +119,23 @@ ${css}
   };
   registerExtension("ui", ui);
 
-  // app/actions/hello.js
-  var hello = () => {
-    const res = drift(
-      t.fetch("https://dog.ceo/api/breeds/image/random")
-    );
-    const data = JSON.parse(res.body);
-    return ui.render("static/index.html", { dog_image: data.message });
+  // app/actions/render.js
+  var render = (req) => {
+    return ui.render("static/index.html");
   };
-  return __toCommonJS(hello_exports);
+  var render_default = render;
+  return __toCommonJS(render_exports);
 })();
 
 (function () {
   const fn =
-    __titan_exports["hello"] ||
+    __titan_exports["render"] ||
     __titan_exports.default;
 
   if (typeof fn !== "function") {
-    throw new Error("[Titan] Action 'hello' not found or not a function");
+    throw new Error("[Titan] Action 'render' not found or not a function");
   }
 
-  globalThis["hello"] = globalThis.defineAction(fn);
+  globalThis["render"] = globalThis.defineAction(fn);
 })();
 

@@ -1,7 +1,7 @@
 import t from "../titan/titan.js";
 
 
-t.get("/d").action("dtest")
+t.get("/d").action("d")
 
 t.get("/hello").action("hello") // pass a json payload { "name": "titan" }
 

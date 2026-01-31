@@ -15,7 +15,7 @@ server/action_map.json
 server/actions/
 server/titan/
 server/src/actions_rust/
-deploy/
+server\src\actions
 
 # Rust Build Artifacts
 server/target/

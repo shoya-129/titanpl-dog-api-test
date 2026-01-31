@@ -33,7 +33,7 @@ RUN npm install -g @ezetgalaxy/titan@latest
 # ---------- Copy Project ----------
 COPY . .
 
-RUN node app/app.js --build && titan build
+RUN node app/app.js --build
 
 # ---------- Extensions ----------
 SHELL ["/bin/bash", "-c"]
@@ -66,7 +66,28 @@ COPY --from=builder /app/server/target/release/titan-server ./titan-server
 COPY --from=builder /app/server/routes.json .
 COPY --from=builder /app/server/action_map.json .
 COPY --from=builder /app/server/src/actions ./actions
+
+# ---------------- OPTIONAL APP FOLDERS ----------------
+# If you add any extra folders inside /app/app,
+# make sure to copy them from the builder stage.
+
+# Static assets
 COPY --from=builder /app/app/static ./static
+
+# Public assets
+# COPY --from=builder /app/app/public ./public
+
+#DB
+# COPY --from=builder /app/app/db ./db
+
+# Any custom / extra folders
+# Example:
+# COPY --from=builder /app/app/<folder-name> ./<folder-name>
+
+# -------------------------------------------------------
+
+
+# Extensions
 COPY --from=builder /app/.ext ./.ext
 
 # ---- Ensure Executable ----
@@ -86,4 +107,4 @@ RUN which node || echo "NodeJS not present ✔"
 EXPOSE 5100
 
 # ---- Force Foreground Process ----
-ENTRYPOINT ["./titan-server"]
+CMD ["./titan-server"]

@@ -1,25 +1,4 @@
-const { fs } = t.core;
-
-// preload template once
-const root = "../app" || ".";
-let TEMPLATE = null;
-function getTemplate() {
-    if (TEMPLATE) return TEMPLATE;
-    try {
-        TEMPLATE = fs.readFile(root + "/static/index.html") || fs.readFile(root + "/app/static/index.html");
-    } catch (e) {
-        t.log("Template load error:", e);
-    }
-    return TEMPLATE || "<h1>No Template (Load Failed)</h1>";
-}
-// renderer
-function render(template, data) {
-    let out = template;
-    for (const k in data) {
-        out = out.replaceAll(`tpl{{${k}}}`, data[k]);
-    }
-    return out;
-}
+import { ui } from "@t8n/ui"
 
 export const hello = () => {
     // fetch dog every request
@@ -30,9 +9,5 @@ export const hello = () => {
 
     const data = JSON.parse(res.body);
 
-    const html = render(getTemplate(), {
-        dog_image: data.message
-    });
-
-    return t.response.html(html);
+    return ui.render("static/index.html", { dog_image: data.message })
 };
